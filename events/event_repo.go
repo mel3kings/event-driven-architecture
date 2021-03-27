@@ -13,17 +13,26 @@ type InMemoryEventRepo struct {
 	currentEvent *Event
 }
 
-func (repo InMemoryEventRepo) CreateEvent(event Event) {
-	repo.currentEvent = &event
+func (Repo *InMemoryEventRepo) CreateEvent(event Event) {
+	Repo.currentEvent = &event
 }
 
-func (repo InMemoryEventRepo) GetNextEvent() (event Event) {
-	if repo.currentEvent != nil{
-		return *repo.currentEvent
+func (Repo *InMemoryEventRepo) GetNextEvent() (event Event) {
+	if Repo.currentEvent != nil {
+		return *Repo.currentEvent
 	}
 	return Event{}
 }
 
-func (repo InMemoryEventRepo) SetEventHandled(eventID uuid.UUID) {
-	repo.currentEvent = nil
+func (Repo *InMemoryEventRepo) SetEventHandled(eventID uuid.UUID) {
+	Repo.currentEvent = nil
+}
+
+func (Repo *InMemoryEventRepo) VerifyEvent() {
+	if Repo.currentEvent != nil {
+		println(Repo.currentEvent.Metadata)
+	} else {
+		println("Event not found")
+	}
+
 }

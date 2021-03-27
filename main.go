@@ -8,17 +8,29 @@ import (
 	"os"
 	"os/signal"
 	"syscall"
+	"time"
 )
 
 func main() {
 	println("application doing something")
+	memoryRepo := events.InMemoryEventRepo{}
+	applicationStartedEvent := events.Event{
+		UserID:      0,
+		UserIP:      "",
+		GUID:        nil,
+		RequestID:   nil,
+		EventType:   events.ApplicationTested,
+		EventStatus: 0,
+		Metadata:    "TestedEvent",
+	}
+	memoryRepo.CreateEvent(applicationStartedEvent)
+	memoryRepo.VerifyEvent()
 	eventPoller := eventshandler.EventPoller{
 		PolledEvent: events.Event{},
-		EventRepo:   events.InMemoryEventRepo{},
+		EventRepo:   &memoryRepo,
 		EventPool:   *eventshandler.NewEventHandlerPool(5),
 	}
 	eventPoller.Start()
-	someBusinessLogic()
 
 	// graceful shutdown here
 	incomingSignalsChannel := make(chan os.Signal, 1)
@@ -26,6 +38,19 @@ func main() {
 	signal.Notify(incomingSignalsChannel, os.Interrupt)
 	signal.Notify(incomingSignalsChannel, syscall.SIGTERM)
 	fmt.Println("Server waiting on signal.")
+	go func() {
+		time.Sleep(20 * time.Second)
+		memoryRepo.CreateEvent( events.Event{
+			UserID:      0,
+			UserIP:      "",
+			GUID:        nil,
+			RequestID:   nil,
+			EventType:   events.ApplicationStarted,
+			EventStatus: 0,
+			Metadata:    "StartedEvent",
+		})
+		println("inserting new event")
+	}()
 	<-incomingSignalsChannel
 	delayedContext, signalAppToStop := context.WithCancel(context.Background())
 	//common.LogInfo("Shutting down HTTP Server..")
@@ -37,20 +62,4 @@ func main() {
 
 	delayedContext.Done()
 	defer signalAppToStop()
-
-}
-
-func someBusinessLogic() {
-	fmt.Println("create event")
-	eventRepo := events.InMemoryEventRepo{}
-	applicationStartedEvent := events.Event{
-		UserID:      0,
-		UserIP:      "",
-		GUID:        nil,
-		RequestID:   nil,
-		EventType:   events.ApplicationStarted,
-		EventStatus: 0,
-		Metadata:    "",
-	}
-	eventRepo.CreateEvent(applicationStartedEvent)
 }

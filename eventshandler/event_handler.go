@@ -11,8 +11,14 @@ func NewEventHandler(polledEvent *events.Event) EventHandler {
 	case events.ApplicationStarted:
 		return ApplicationStartedEventHandler{
 			event:     *polledEvent,
-			eventRepo: events.InMemoryEventRepo{},
+			eventRepo: &events.InMemoryEventRepo{},
 		}
+	case events.ApplicationTested:
+		return ApplicationTestedEventHandler{
+			event:     *polledEvent,
+			eventRepo: &events.InMemoryEventRepo{},
+		}
+
 	}
 	return nil
 }

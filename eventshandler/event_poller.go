@@ -2,8 +2,9 @@ package eventshandler
 
 import (
 	"fmt"
-	"github.com/mel3kings/event-driven-architecture/events"
 	"time"
+
+	"github.com/mel3kings/event-driven-architecture/events"
 )
 
 type EventPoller struct {
@@ -19,7 +20,7 @@ func (handler *EventPoller) Start() {
 			polledEvent := handler.EventRepo.GetNextEvent()
 			eventHandler := NewEventHandler(&polledEvent)
 			handler.EventPool.add(eventHandler)
-			time.Sleep(time.Second * 10)
+			time.Sleep(time.Second * 5)
 		}
 	}()
 }

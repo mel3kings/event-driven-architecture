@@ -5,13 +5,13 @@ import (
 	"github.com/mel3kings/event-driven-architecture/events"
 )
 
-type ApplicationStartedEventHandler struct {
+type ApplicationTestedEventHandler struct {
 	event     events.Event
 	eventRepo events.EventRepo
 }
 
-func (handler ApplicationStartedEventHandler) HandleEvent() {
-	fmt.Print("Application Started Event Handled", handler.event)
+func (handler ApplicationTestedEventHandler) HandleEvent() {
+	fmt.Print("Application TESTED Event Handled", handler.event)
 	fmt.Print(handler.event.Metadata)
 	handler.eventRepo.SetEventHandled(handler.event.GUID)
 }
