@@ -16,11 +16,17 @@ type EventPoller struct {
 func (handler *EventPoller) Start() {
 	go func() {
 		for !handler.EventPool.shuttingDown {
+			time.Sleep(3 * time.Second)
 			fmt.Println("polling event")
 			polledEvent := handler.EventRepo.GetNextEvent()
-			eventHandler := NewEventHandler(&polledEvent)
-			handler.EventPool.add(eventHandler)
-			time.Sleep(time.Second * 5)
+			if polledEvent != nil {
+				eventHandler := NewEventHandler(
+					polledEvent, &handler.EventRepo)
+				handler.EventPool.add(eventHandler)
+				time.Sleep(time.Second * 5)
+			} else {
+				fmt.Println("no event to process")
+			}
 		}
 	}()
 }

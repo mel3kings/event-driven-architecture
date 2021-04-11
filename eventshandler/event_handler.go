@@ -6,19 +6,13 @@ type EventHandler interface {
 	HandleEvent()
 }
 
-func NewEventHandler(polledEvent *events.Event) EventHandler {
+func NewEventHandler(polledEvent *events.Event, repo *events.EventRepo) EventHandler {
 	switch polledEvent.EventType {
 	case events.ApplicationStarted:
 		return ApplicationStartedEventHandler{
 			event:     *polledEvent,
-			eventRepo: &events.InMemoryEventRepo{},
+			eventRepo: *repo,
 		}
-	case events.ApplicationTested:
-		return ApplicationTestedEventHandler{
-			event:     *polledEvent,
-			eventRepo: &events.InMemoryEventRepo{},
-		}
-
 	}
 	return nil
 }
