@@ -75,8 +75,11 @@ about: ## Display info related to the build
 	@echo "Go package: ${PACKAGE}"
 	@echo "Openssl version: $(shell openssl version)"
 
-run-server: #runs servers after generating files
+server: #runs servers after generating files
 	./bin/grpc/server
+
+client: #runs client after generating files
+	./bin/grpc/client
 
 help: ## Show this help
 	@${HELP_CMD}
