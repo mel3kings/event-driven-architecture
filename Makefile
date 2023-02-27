@@ -83,3 +83,6 @@ client: #runs client after generating files
 
 help: ## Show this help
 	@${HELP_CMD}
+
+run-temporal:
+	cd temporal_workflow; docker-compose up;

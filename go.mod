@@ -2,6 +2,7 @@ module github.com/mel3kings/event-driven-architecture
 
 require (
 	github.com/pborman/uuid v1.2.1
+	go.temporal.io/sdk v1.21.1
 	google.golang.org/grpc v1.53.0
 	google.golang.org/protobuf v1.28.1
 )
