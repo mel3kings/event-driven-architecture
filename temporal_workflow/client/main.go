@@ -1,8 +1,9 @@
-package temporal_workflow
+package main
 
 import (
 	"context"
 	"fmt"
+	"github.com/mel3kings/event-driven-architecture/temporal_workflow"
 	"go.temporal.io/sdk/client"
 	"log"
 )
@@ -16,11 +17,11 @@ func main() {
 
 	options := client.StartWorkflowOptions{
 		ID:        "greeting-workflow",
-		TaskQueue: GreetingTaskQueue,
+		TaskQueue: temporal_workflow.GreetingTaskQueue,
 	}
 
 	name := "World"
-	we, err := c.ExecuteWorkflow(context.Background(), options, GreetingWorkflow, name)
+	we, err := c.ExecuteWorkflow(context.Background(), options, temporal_workflow.GreetingWorkflow, name)
 	if err != nil {
 		log.Fatalln("unable to complete Workflow", err)
 	}

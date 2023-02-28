@@ -1,4 +1,4 @@
-package worker
+package main
 
 import (
 	app "github.com/mel3kings/event-driven-architecture/temporal_workflow"
