@@ -84,5 +84,8 @@ client: #runs client after generating files
 help: ## Show this help
 	@${HELP_CMD}
 
-run-temporal:
-	cd temporal_workflow; docker-compose up;
+temporal-server:
+	cd temporal_workflow; docker-compose up --detach; sleep 15; go run worker/main.go
+
+temporal-client:
+	cd temporal_workflow; go run client/main.go
